@@ -1,0 +1,46 @@
+Clock Circuit =
+Number of oscillations (set to 0 for infinity) =
+Interval (seconds) =
+
+Pulse Circuit =
+Output Time (0.1 sec ~ 5.0 sec) =
+
+Counter Circuit =
+Counter Limit Value =
+
+Delay Circuit =
+Delay Time (0.1 sec ~ 10 sec) =
+
+Toggle Circuit =
+
+sec =
+infinity =
+
+Code: Clock Circuit =
+Code: Pulse Circuit =
+Code: Counter Circuit =
+Code: Delay Circuit =
+Code: Toggle Circuit =
+
+Inventory Checker =
+Check Target: =
+Inventory Name: =
+Not available =
+Invert Mesecon signal =
+
+Round Button =
+Small Button =
+
+Switch =
+
+Directional Mesecon Signal Transmitter =
+Directional Mesecon Signal Receiver =
+Fixed Distance Mode =
+
+Wooden Pressure Plate =
+Stone Pressure Plate =
+
+Mesecon Multiplexer =
+Mesecon Demultiplexer =
+Channel No. =
+Save =

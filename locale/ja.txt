@@ -1,0 +1,46 @@
+Clock Circuit = クロック回路
+Number of oscillations (set to 0 for infinity) = 発振回数 (0の場合は無制限)
+Interval (seconds) = 発振間隔 (秒)
+
+Pulse Circuit = パルス回路
+Output Time (0.1 sec ~ 5.0 sec) = 出力時間 (0.1秒 〜 5.0秒)
+
+Counter Circuit = カウンタ回路
+Counter Limit Value = カウンタ上限値
+
+Delay Circuit = 遅延回路
+Delay Time (0.1 sec ~ 10 sec) = 遅延時間 (0.1秒 〜 10秒)
+
+Toggle Circuit = トグル回路
+
+sec = 秒
+infinity = 無制限
+
+Code: Clock Circuit = コード:クロック回路
+Code: Pulse Circuit = コード:パルス回路
+Code: Counter Circuit = コード:カウンタ回路
+Code: Delay Circuit = コード:遅延回路
+Code: Toggle Circuit = コード:トグル回路
+
+Inventory Checker = インベントリーチェッカー
+Check Target: = チェック対象:
+Inventory Name: = インベントリー名:
+Not available = インベントリーがありません
+Invert Mesecon signal = Mesecon信号を反転する
+
+Round Button = 丸ボタン
+Small Button = 小型ボタン
+
+Switch = スイッチ
+
+Directional Mesecon Signal Transmitter = 指向性Mesecon信号送信機
+Directional Mesecon Signal Receiver = 指向性Mesecon信号受信機
+Fixed Distance Mode = 固定距離モード
+
+Wooden Pressure Plate = 木の感圧板
+Stone Pressure Plate = 石の感圧板
+
+Mesecon Multiplexer = Meseconマルチプレクサ
+Mesecon Demultiplexer = Meseconデマルチプレクサ
+Channel No. = チャンネル番号:
+Save = 保存
