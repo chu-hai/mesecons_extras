@@ -1,0 +1,19 @@
+#    Enable clock, counter, delayer, pulse and toggle circuit.
+mesecons_extras.enable_basic_circuits (Enable basic circuits) bool true
+
+#    Enable inventory checker.
+mesecons_extras.enable_inv_checker (Enable inventory checker) bool true
+
+#    Enable switch and buttons.
+mesecons_extras.enable_switches (Enable switch and button) bool true
+
+#    Enable mesecon signal transmitter and receiver.
+mesecons_extras.enable_transmitter (Enable transmitter and receiver) bool true
+
+#    Enable stone and wooden pressure plate.
+#    requirements: player_events.
+mesecons_extras.enable_pressure_plate (Enable pressure plate) bool true
+
+#    Enable mesecon signal multiplexer and demultiplexer.
+#    requirements: digilines.
+mesecons_extras.enable_multiplexer (Enable multiplexer) bool true

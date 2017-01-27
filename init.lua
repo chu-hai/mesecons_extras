@@ -10,41 +10,57 @@ else
 	mesecons_extras.getter = function(s) return s end
 end
 
--- Load config file
-local m_conf_file = modpath.."/mesecons_extras.conf"
-local w_conf_file = worldpath.."/mesecons_extras.conf"
-if file_exists(w_conf_file) then
-	minetest.log("action", "[Mesecons Extras] Configuration file found at world directory.")
-	mesecons_extras.config = Settings(w_conf_file)
-elseif file_exists(m_conf_file) then
-	minetest.log("action", "[Mesecons Extras] Configuration file found at mod directory.")
-	mesecons_extras.config = Settings(m_conf_file)
+-- Load settings
+mesecons_extras.settings = {
+	enable_basic_circuits = true,
+	enable_inv_checker = true,
+	enable_switches = true,
+	enable_transmitter = true,
+	enable_pressure_plate = true,
+	enable_multiplexer = true
+}
+for name, _ in pairs(mesecons_extras.settings) do
+	local flag = minetest.setting_getbool("mesecons_extras." .. name)
+	if flag ~= nil then
+		mesecons_extras.settings[name] = flag
+	end
 end
 
 -- Load modules
-dofile(modpath.."/functions.lua")
-dofile(modpath.."/material.lua")
-
 local module_names = {
-	"clock",
-	"pulse",
-	"counter",
-	"delayer",
-	"toggle",
-	"button",
-	"switch",
-	"inv_checker",
-	"transmitter",
-	"receiver",
-	"pplate",
-	"multiplexer"
+	enable_basic_circuits = {
+		"clock",
+		"pulse",
+		"counter",
+		"delayer",
+		"toggle"
+	},
+	enable_inv_checker = {
+		"inv_checker",
+	},
+	enable_switches = {
+		"button",
+		"switch"
+	},
+	enable_transmitter = {
+		"transmitter",
+		"receiver"
+	},
+	enable_pressure_plate = {
+		"pplate"
+	},
+	enable_multiplexer = {
+		"multiplexer"
+	}
 }
 
-for _, name in ipairs(module_names) do
-	local enable_load = mesecons_extras.config and (mesecons_extras.config:get_bool("enable_"..name) ~= false)
-
-	if not mesecons_extras.config or enable_load then
-		dofile(modpath.."/"..name..".lua")
+dofile(modpath.."/functions.lua")
+dofile(modpath.."/material.lua")
+for name, modules in pairs(module_names) do
+	if mesecons_extras.settings[name] then
+		for _, filename in ipairs(modules) do
+			dofile(modpath .. "/" .. filename .. ".lua")
+		end
 	end
 end
 
