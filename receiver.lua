@@ -91,7 +91,7 @@ for dist = min_dist, max_dist do
 			"mesecons_extras_receiver_front_off.png"
 		},
 		paramtype2 = "facedir",
-		groups = {snappy = 2, dig_immediate = 2, not_in_creative_inventory = (dist == min_dist and 0 or 1)},
+		groups = {cracky = 2, oddly_breakable_by_hand = 3, not_in_creative_inventory = (dist == min_dist and 0 or 1)},
 		sounds = default.node_sound_stone_defaults(),
 		drop = "mesecons_extras:mesecon_receiver_off_2",
 
@@ -144,7 +144,7 @@ for dist = min_dist, max_dist do
 			"mesecons_extras_receiver_front_on.png"
 		},
 		paramtype2 = "facedir",
-		groups = {snappy = 2, dig_immediate = 2, not_in_creative_inventory = 1},
+		groups = {cracky = 2, oddly_breakable_by_hand = 3, not_in_creative_inventory = 1},
 		sounds = default.node_sound_stone_defaults(),
 		drop = "mesecons_extras:mesecon_receiver_off_2",
 

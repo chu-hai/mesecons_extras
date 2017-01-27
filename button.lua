@@ -51,7 +51,7 @@ local function register_button(basename, description, drawtype, recipe, output_c
 			tmp_tiles = table.copy(tiles_off)
 			tmp_mesh = mesh_off
 			tmp_nbox = nodebox_off and table.copy(nodebox_off) or nil
-			tmp_groups = {dig_immediate=2, mesecon_needs_receiver = 1}
+			tmp_groups = {cracky = 2, oddly_breakable_by_hand = 3, mesecon_needs_receiver = 1}
 			tmp_light_source = 0
 			tmp_mesecon_state = mesecon.state.off
 			tmp_click = button_turn_on(nodename_off, nodename_on)
@@ -60,7 +60,7 @@ local function register_button(basename, description, drawtype, recipe, output_c
 			tmp_tiles = table.copy(tiles_on)
 			tmp_mesh = mesh_on
 			tmp_nbox = nodebox_on and table.copy(nodebox_on) or nil
-			tmp_groups = {dig_immediate=2, mesecon_needs_receiver = 1, not_in_creative_inventory = 1}
+			tmp_groups = {cracky = 2, oddly_breakable_by_hand = 3, mesecon_needs_receiver = 1, not_in_creative_inventory = 1}
 			tmp_light_source = 8
 			tmp_mesecon_state = mesecon.state.on
 			tmp_click = nil

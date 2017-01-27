@@ -276,7 +276,7 @@ local function register_node(m_type, desc)
 		paramtype2 = "facedir",
 		sunlight_propagates = true,
 		walkable = true,
-		groups = {snappy = 2, dig_immediate = 2},
+		groups = {cracky = 2, oddly_breakable_by_hand = 3},
 		sounds = default.node_sound_stone_defaults(),
 		stats = {},
 
@@ -381,7 +381,7 @@ local function register_node(m_type, desc)
 				paramtype2 = "facedir",
 				sunlight_propagates = true,
 				walkable = true,
-				groups = {snappy = 2, dig_immediate = 2, not_in_creative_inventory = 1},
+				groups = {cracky = 2, oddly_breakable_by_hand = 3, not_in_creative_inventory = 1},
 				sounds = default.node_sound_stone_defaults(),
 				stats = stats,
 				drop = "mesecons_extras:signal_"..m_type,

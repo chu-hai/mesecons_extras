@@ -186,7 +186,7 @@ minetest.register_node("mesecons_extras:inv_checker_inactive", {
 		wall_side   = {-0.5, -0.15425, -0.15425, -0.1875, 0.15425, 0.15425},
 	},
 	walkable = true,
-	groups = {choppy = 1, snappy = 1, dig_immediate = 2, attached_node = 1},
+	groups = {cracky = 2, oddly_breakable_by_hand = 3, attached_node = 1},
 	paramtype = "light",
 	paramtype2 = "wallmounted",
 	sunlight_propagates = true,
@@ -196,7 +196,7 @@ minetest.register_node("mesecons_extras:inv_checker_inactive", {
 
 	on_rotate = screwdriver.disallow,
 
-	sounds = default.node_sound_wood_defaults(),
+	sounds = default.node_sound_stone_defaults(),
 	mesecons = {
 		receptor = {
 			state = mesecon.state.off,
@@ -217,7 +217,7 @@ for _, stat in pairs({"on", "off"}) do
 			wall_side   = {-0.5, -0.15425, -0.15425, -0.1875, 0.15425, 0.15425},
 		},
 		walkable = true,
-		groups = {choppy = 1, snappy = 1, dig_immediate = 2, attached_node = 1, not_in_creative_inventory = 1},
+		groups = {cracky = 2, oddly_breakable_by_hand = 3, attached_node = 1, not_in_creative_inventory = 1},
 		paramtype = "light",
 		paramtype2 = "wallmounted",
 		sunlight_propagates = true,
@@ -228,7 +228,7 @@ for _, stat in pairs({"on", "off"}) do
 
 		on_rotate = screwdriver.disallow,
 
-		sounds = default.node_sound_wood_defaults(),
+		sounds = default.node_sound_stone_defaults(),
 		mesecons = {
 			receptor = {
 				state = ((stat == "on") and mesecon.state.on or mesecon.state.off),

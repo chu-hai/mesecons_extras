@@ -83,7 +83,7 @@ function mesecons_extras.register_pressureplate(basename, description, recipe, o
 			tmp_name = nodename_off
 			tmp_tiles = table.copy(tiles_off)
 			tmp_nbox = nodebox_off and table.copy(nodebox_off) or default_nbox_off
-			tmp_groups = {snappy = 2, oddly_breakable_by_hand = 3}
+			tmp_groups = {cracky = 2, oddly_breakable_by_hand = 3}
 
 			tmp_mesecon_state = mesecon.state.off
 			tmp_stepin_func = step_in(nodename_on)
@@ -92,7 +92,7 @@ function mesecons_extras.register_pressureplate(basename, description, recipe, o
 			tmp_name = nodename_on
 			tmp_tiles = table.copy(tiles_on)
 			tmp_nbox = nodebox_on and table.copy(nodebox_on) or default_nbox_on
-			tmp_groups = {snappy = 2, oddly_breakable_by_hand = 3, not_in_creative_inventory = 1}
+			tmp_groups = {cracky = 2, oddly_breakable_by_hand = 3, not_in_creative_inventory = 1}
 
 			tmp_mesecon_state = mesecon.state.on
 			tmp_stepin_func = nil
@@ -116,7 +116,7 @@ function mesecons_extras.register_pressureplate(basename, description, recipe, o
 			on_playerevents_step_in = tmp_stepin_func,
 			on_playerevents_step_out = tmp_stepout_func,
 
-			sounds = default.node_sound_wood_defaults(),
+			sounds = default.node_sound_stone_defaults(),
 			mesecons = {receptor = {
 				state = tmp_mesecon_state,
 				rules = mesecon.rules.pplate
