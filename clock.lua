@@ -17,7 +17,7 @@ local function update_infotext(meta)
 	local str = intl.desc
 	local maximum_count = meta:get_int("maximum_count")
 	local counter_current = meta:get_int("counter_current")
-	local interval = meta:get_int("interval")
+	local interval = meta:get_float("interval")
 
 	if maximum_count == 0 then
 		str = str.." ["..intl.infinity.." : "..interval..intl.second.."]"
@@ -81,7 +81,7 @@ local function activate(pos, node, link, newstate)
 	if link.name == "input" then
 		change_mesecon_signal(pos, node, "on")
 		meta:set_int("counter_current", 1)
-		timer:start(meta:get_int("interval"))
+		timer:start(meta:get_float("interval"))
 		update_infotext(meta)
 	end
 end
@@ -118,7 +118,7 @@ local function on_construct(pos)
 	local meta = minetest.get_meta(pos)
 
 	meta:set_int("maximum_count", 0)
-	meta:set_int("interval", default_interval)
+	meta:set_float("interval", default_interval)
 	meta:set_int("counter_current", 0)
 	meta:set_string("state", "off")
 
@@ -140,7 +140,7 @@ local function on_receive_fields(pos, formname, fields)
 	if fields.interval then
 		num = tonumber(fields.interval)
 		if num then
-			meta:set_int("interval", num)
+			meta:set_float("interval", num)
 			update_infotext(meta)
 		end
 	end
