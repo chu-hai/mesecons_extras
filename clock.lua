@@ -7,8 +7,7 @@ intl.interval = S("Interval (seconds)")
 intl.second = S("sec")
 intl.infinity = S("infinity")
 
-local default_interval = 2
-
+local default_interval = 1
 
 --------------------------------------
 -- Functions
@@ -140,9 +139,16 @@ local function on_receive_fields(pos, formname, fields)
 	if fields.interval then
 		num = tonumber(fields.interval)
 		if num then
+			if num > 0 then
+				num = math.floor(num * 10) / 10
+			else
+				num = default_interval
+			end
 			meta:set_float("interval", num)
 			update_infotext(meta)
 		end
+
+
 	end
 end
 

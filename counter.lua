@@ -7,6 +7,7 @@ intl.output_time = S("Output Time (0.1 sec ~ 5.0 sec)")
 
 local default_output_time = 0.5
 local default_counter_limit = 5
+local min_output_time = 0.1
 local max_output_time = 5.0
 
 
@@ -119,7 +120,7 @@ local function on_receive_fields(pos, formname, fields)
 	if fields.output_time then
 		num = tonumber(fields.output_time)
 		if num then
-			num = math.min(math.max(num, 0.1), max_output_time)
+			num = math.min(math.max(num, min_output_time), max_output_time)
 			num = math.floor(num * 10) / 10
 			meta:set_float("output_time", num)
 			update_infotext(meta)

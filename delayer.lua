@@ -6,6 +6,8 @@ intl.delay_time = S("Delay Time (0.1 sec ~ 10 sec)")
 intl.second = S("sec")
 
 local default_delay_time = 0.5
+local min_delay_time = 0.1
+local max_delay_time = 10
 
 local stage_inactive = 1
 local stage_active = 2
@@ -100,8 +102,9 @@ local function on_receive_fields(pos, formname, fields)
 
 	if (fields.delay_time) then
 		num = tonumber(fields.delay_time)
-		if (num ~= nil) then
-			num = math.min(math.max(num, 0.1), 10)
+		if num then
+			num = math.min(math.max(num, min_delay_time), max_delay_time)
+			num = math.floor(num * 10) / 10
 			meta:set_float("delay_time", num)
 			update_infotext(meta)
 		end
