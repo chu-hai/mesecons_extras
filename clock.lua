@@ -9,6 +9,7 @@ intl.infinity = S("infinity")
 
 local default_interval = 1
 
+
 --------------------------------------
 -- Functions
 --------------------------------------
@@ -147,8 +148,6 @@ local function on_receive_fields(pos, formname, fields)
 			meta:set_float("interval", num)
 			update_infotext(meta)
 		end
-
-
 	end
 end
 
