@@ -17,3 +17,7 @@ mesecons_extras.enable_pressure_plate (Enable pressure plate) bool true
 #    Enable mesecon signal multiplexer and demultiplexer.
 #    requirements: digilines.
 mesecons_extras.enable_multiplexer (Enable multiplexer) bool true
+
+#    Check interval for inventory checker.
+#    This depends on node timer interval.
+mesecons_extras.inv_checker_interval (Check interval for inventory checker) float 1.0

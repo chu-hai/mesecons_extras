@@ -17,12 +17,25 @@ mesecons_extras.settings = {
 	enable_switches = true,
 	enable_transmitter = true,
 	enable_pressure_plate = true,
-	enable_multiplexer = true
+	enable_multiplexer = true,
+
+	inv_checker_interval = 1.0
 }
-for name, _ in pairs(mesecons_extras.settings) do
-	local flag = minetest.setting_getbool("mesecons_extras." .. name)
-	if flag ~= nil then
-		mesecons_extras.settings[name] = flag
+
+for name, v in pairs(mesecons_extras.settings) do
+	local setting_data = nil
+	local setting_name = "mesecons_extras." .. name
+	if type(v) == "boolean" then
+		setting_data = minetest.setting_getbool(setting_name)
+	else
+		setting_data = minetest.setting_get(setting_name)
+		if type(v) == "number" then
+			setting_data = tonumber(setting_data)
+		end
+	end
+
+	if setting_data ~= nil then
+		mesecons_extras.settings[name] = setting_data
 	end
 end
 
