@@ -201,6 +201,9 @@ minetest.register_node("mesecons_extras:mesecons_extras_pulse_active_on", {
 		receptor = {
 			state = mesecon.state.on,
 			rules = get_output_rules
+		},
+		effector = {
+			rules = get_input_rules
 		}
 	}
 })
