@@ -10,3 +10,7 @@ function mesecons_extras.rotate_simple(pos, node, user, mode, new_param2)
 
 	return mode == screwdriver.ROTATE_FACE
 end
+
+function mesecons_extras.is_protected(pos, player)
+	return minetest.is_protected(pos, player:get_player_name())
+end

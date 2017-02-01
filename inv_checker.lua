@@ -170,6 +170,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local pos = minetest.string_to_pos(string.sub(formname, string.len(inv_checker_formname) + 1))
 	local meta = minetest.get_meta(pos)
 
+	if mesecons_extras.is_protected(pos, player) then
+		return
+	end
+
 	if fields.invlist then
 		meta:set_string("target_inv", fields.invlist)
 	end

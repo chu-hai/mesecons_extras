@@ -132,7 +132,11 @@ local function on_punch(desc)
 end
 
 local function on_receive_fields(desc)
-	return function(pos, formname, fields)
+	return function(pos, formname, fields, sender)
+		if mesecons_extras.is_protected(pos, sender) then
+			return
+		end
+
 		local meta = minetest.get_meta(pos)
 		if fields.save then
 			meta:set_int("channel_no", fields.channel_no)

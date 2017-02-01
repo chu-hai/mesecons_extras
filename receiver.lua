@@ -35,12 +35,14 @@ local function on_construct(pos)
 	update_formspec(meta)
 end
 
-local function can_change_distance(pos)
+local function can_change_distance(pos, player)
 	local result = true
 	local meta = minetest.get_meta(pos)
 	update_formspec(meta)
 
-	if meta:get_string("fixed_mode") == "on" then
+	if mesecons_extras.is_protected(pos, player) then
+		result = false
+	elseif meta:get_string("fixed_mode") == "on" then
 		result = false
 	end
 
@@ -49,7 +51,7 @@ end
 
 local function distance_change(dist, stat)
 	return function(pos, node, puncher)
-		if can_change_distance(pos) then
+		if can_change_distance(pos, puncher) then
 			local new_dist = ((dist + 1) > max_dist) and min_dist or dist + 1
 			node.name = "mesecons_extras:mesecon_receiver_"..stat.."_"..new_dist
 			minetest.swap_node(pos, node)
@@ -66,8 +68,12 @@ local function on_rotate(pos, node, user, mode, new_param2)
 	return false
 end
 
-local function on_receive_fields(pos, formname, fields)
+local function on_receive_fields(pos, formname, fields, sender)
 	local meta = minetest.get_meta(pos)
+
+	if mesecons_extras.is_protected(pos, sender) then
+		return
+	end
 
 	if fields.fixed_mode then
 		meta:set_string("fixed_mode", (fields.fixed_mode == "true" and "on" or "off"))
@@ -182,4 +188,3 @@ minetest.register_craft({
 		{"default:steel_ingot",           "mesecons:mesecon",              "default:steel_ingot"},
 	}
 })
-

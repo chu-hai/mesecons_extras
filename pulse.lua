@@ -69,9 +69,13 @@ local function on_construct(pos)
 	update_formspec(meta)
 end
 
-local function on_receive_fields(pos, formname, fields)
+local function on_receive_fields(pos, formname, fields, sender)
 	local meta = minetest.get_meta(pos)
 	local num
+
+	if mesecons_extras.is_protected(pos, sender) then
+		return
+	end
 
 	if fields.output_time then
 		num = tonumber(fields.output_time)

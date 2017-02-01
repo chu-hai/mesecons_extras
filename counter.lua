@@ -105,9 +105,13 @@ local function on_construct(pos)
 	update_formspec(meta)
 end
 
-local function on_receive_fields(pos, formname, fields)
+local function on_receive_fields(pos, formname, fields, sender)
 	local meta = minetest.get_meta(pos)
 	local num
+
+	if mesecons_extras.is_protected(pos, sender) then
+		return
+	end
 
 	if fields.counter_limit then
 		num = tonumber(fields.counter_limit) or 0

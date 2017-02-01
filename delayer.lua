@@ -71,7 +71,7 @@ end
 local function deactivate(pos, node)
 	local meta = minetest.get_meta(pos)
 
-	if (meta:get_int("stage") == stage_off_delay) then
+	if meta:get_int("stage") == stage_off_delay then
 		return
 	end
 	meta:set_int("stage", stage_off_delay)
@@ -96,11 +96,15 @@ local function on_construct(pos)
 	update_formspec(meta)
 end
 
-local function on_receive_fields(pos, formname, fields)
+local function on_receive_fields(pos, formname, fields, sender)
 	local meta = minetest.get_meta(pos)
 	local num
 
-	if (fields.delay_time) then
+	if mesecons_extras.is_protected(pos, sender) then
+		return
+	end
+
+	if fields.delay_time then
 		num = tonumber(fields.delay_time)
 		if num then
 			num = math.min(math.max(num, min_delay_time), max_delay_time)
