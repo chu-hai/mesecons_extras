@@ -177,10 +177,10 @@ minetest.register_node("mesecons_extras:mesecons_extras_toggle_active_on", {
 -- Craft recipe definitions
 --------------------------------------
 minetest.register_craft({
-	output = 'mesecons_extras:mesecons_extras_toggle',
+	output = "mesecons_extras:mesecons_extras_toggle",
 	recipe = {
-		{'',                  'mesecons_extras:code_toggle',               ''},
-		{'mesecons:mesecon',  'mesecons_luacontroller:luacontroller0000', 'mesecons:mesecon'},
-		{'stairs:slab_stone', 'stairs:slab_stone',                        'stairs:slab_stone'},
+		{"",                  "mesecons_extras:code_toggle",              ""},
+		{"mesecons:mesecon",  "mesecons_luacontroller:luacontroller0000", "mesecons:mesecon"},
+		{"stairs:slab_stone", "stairs:slab_stone",                        "stairs:slab_stone"},
 	}
 })

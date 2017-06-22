@@ -28,42 +28,42 @@ local function register_basic_circuit_items()
 
 
 	minetest.register_craft({
-		output = 'mesecons_extras:code_clock',
+		output = "mesecons_extras:code_clock",
 		recipe = {
-			{'default:paper', '', ''},
-			{'default:paper', 'default:mese_crystal_fragment', 'dye:black'},
-			{'default:paper', '', ''},
+			{"default:paper", "", ""},
+			{"default:paper", "default:mese_crystal_fragment", "dye:black"},
+			{"default:paper", "", ""},
 		}
 	})
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = 'mesecons_extras:code_pulse',
-		recipe = {'mesecons_extras:code_clock'}
+		output = "mesecons_extras:code_pulse",
+		recipe = {"mesecons_extras:code_clock"}
 	})
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = 'mesecons_extras:code_counter',
-		recipe = {'mesecons_extras:code_pulse'}
+		output = "mesecons_extras:code_counter",
+		recipe = {"mesecons_extras:code_pulse"}
 	})
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = 'mesecons_extras:code_delayer',
-		recipe = {'mesecons_extras:code_counter'}
+		output = "mesecons_extras:code_delayer",
+		recipe = {"mesecons_extras:code_counter"}
 	})
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = 'mesecons_extras:code_toggle',
-		recipe = {'mesecons_extras:code_delayer'}
+		output = "mesecons_extras:code_toggle",
+		recipe = {"mesecons_extras:code_delayer"}
 	})
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = 'mesecons_extras:code_clock',
-		recipe = {'mesecons_extras:code_toggle'}
+		output = "mesecons_extras:code_clock",
+		recipe = {"mesecons_extras:code_toggle"}
 	})
 end
 

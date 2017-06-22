@@ -305,10 +305,10 @@ end
 -- Craft recipe definitions
 --------------------------------------
 minetest.register_craft({
-	output = 'mesecons_extras:mesecons_extras_clock',
+	output = "mesecons_extras:mesecons_extras_clock",
 	recipe = {
-		{'',                  'mesecons_extras:code_clock',               ''},
-		{'mesecons:mesecon',  'mesecons_luacontroller:luacontroller0000', 'mesecons:mesecon'},
-		{'stairs:slab_stone', 'stairs:slab_stone',                        'stairs:slab_stone'},
+		{"",                  "mesecons_extras:code_clock",               ""},
+		{"mesecons:mesecon",  "mesecons_luacontroller:luacontroller0000", "mesecons:mesecon"},
+		{"stairs:slab_stone", "stairs:slab_stone",                        "stairs:slab_stone"},
 	}
 })

@@ -213,10 +213,10 @@ minetest.register_node("mesecons_extras:mesecons_extras_pulse_active_on", {
 -- Craft recipe definitions
 --------------------------------------
 minetest.register_craft({
-	output = 'mesecons_extras:mesecons_extras_pulse',
+	output = "mesecons_extras:mesecons_extras_pulse",
 	recipe = {
-		{'',                  'mesecons_extras:code_pulse',               ''},
-		{'mesecons:mesecon',  'mesecons_luacontroller:luacontroller0000', 'mesecons:mesecon'},
-		{'stairs:slab_stone', 'stairs:slab_stone',                        'stairs:slab_stone'},
+		{"",                  "mesecons_extras:code_pulse",               ""},
+		{"mesecons:mesecon",  "mesecons_luacontroller:luacontroller0000", "mesecons:mesecon"},
+		{"stairs:slab_stone", "stairs:slab_stone",                        "stairs:slab_stone"},
 	}
 })

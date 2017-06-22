@@ -259,11 +259,11 @@ end
 -- Craft recipe definitions
 --------------------------------------
 minetest.register_craft({
-	output = 'mesecons_extras:inv_checker 4',
+	output = "mesecons_extras:inv_checker 4",
 	recipe = {
-		{'','default:steel_ingot',''},
-		{'group:wood','default:glass','group:wood'},
-		{'mesecons:mesecon','mesecons:mesecon_torch','mesecons:mesecon'},
+		{"",                "default:steel_ingot",   ""},
+		{"group:wood",      "default:glass",         "group:wood"},
+		{"mesecons:mesecon","mesecons:mesecon_torch","mesecons:mesecon"},
 	}
 })
 

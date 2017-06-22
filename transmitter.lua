@@ -192,7 +192,7 @@ minetest.register_alias("mesecons_extras:mesecon_transmitter", "mesecons_extras:
 -- Craft recipe definitions
 --------------------------------------
 minetest.register_craft({
-	output = 'mesecons_extras:mesecon_transmitter_off_2 1',
+	output = "mesecons_extras:mesecon_transmitter_off_2 1",
 	recipe = {
 		{"",                              "default:mese_crystal_fragment", ""},
 		{"default:mese_crystal_fragment", "default:mese_crystal_fragment", "default:mese_crystal_fragment"},

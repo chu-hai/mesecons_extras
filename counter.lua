@@ -263,10 +263,10 @@ end
 -- Craft recipe definitions
 --------------------------------------
 minetest.register_craft({
-	output = 'mesecons_extras:mesecons_extras_counter',
+	output = "mesecons_extras:mesecons_extras_counter",
 	recipe = {
-		{'',                  'mesecons_extras:code_counter',             ''},
-		{'mesecons:mesecon',  'mesecons_luacontroller:luacontroller0000', 'mesecons:mesecon'},
-		{'stairs:slab_stone', 'stairs:slab_stone',                        'stairs:slab_stone'},
+		{"",                  "mesecons_extras:code_counter",             ""},
+		{"mesecons:mesecon",  "mesecons_luacontroller:luacontroller0000", "mesecons:mesecon"},
+		{"stairs:slab_stone", "stairs:slab_stone",                        "stairs:slab_stone"},
 	}
 })
