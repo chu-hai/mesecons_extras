@@ -66,8 +66,8 @@ function mesecons_extras.register_pressureplate(basename, description, recipe, o
 												nodebox_off, nodebox_on,
 												selection_box, inv_image, wield_image)
  	local nodename = basename
- 	local nodename_off = nodename.."_off"
- 	local nodename_on = nodename.."_on"
+ 	local nodename_off = nodename .. "_off"
+ 	local nodename_on = nodename .. "_on"
 
 
 	for _, stat in pairs({"off", "on"}) do

@@ -18,15 +18,15 @@ local stage_off_delay = 3
 -- Functions
 --------------------------------------
 local function update_infotext(meta)
-	meta:set_string("infotext", intl.desc.." ["..meta:get_float("delay_time")..intl.second.."]")
+	meta:set_string("infotext", intl.desc .. " [" .. meta:get_float("delay_time") .. intl.second .. "]")
 end
 
 local function update_formspec(meta)
 	meta:set_string("formspec", "size[6.4,2]" ..
 		"bgcolor[#00000000]" ..
-		"background[0,0;6.4,2;mesecons_extras_form_bg.png;true]"..
-		"label[0,0;"..intl.desc.."]"..
-		"field[0.5,0.8;6,2;delay_time;"..intl.delay_time..";${delay_time}]"
+		"background[0,0;6.4,2;mesecons_extras_form_bg.png;true]" ..
+		"label[0,0;" .. intl.desc .. "]" ..
+		"field[0.5,0.8;6,2;delay_time;" .. intl.delay_time .. ";${delay_time}]"
 	)
 
 	update_infotext(meta)
@@ -190,10 +190,10 @@ minetest.register_node("mesecons_extras:mesecons_extras_delayer", {
 })
 
 for _, stat in pairs({"on", "off"}) do
-	minetest.register_node("mesecons_extras:mesecons_extras_delayer_active_"..stat, {
+	minetest.register_node("mesecons_extras:mesecons_extras_delayer_active_" .. stat, {
 		description = intl.desc,
 		tiles = {
-			"mesecons_extras_delayer_top_active_"..stat..".png",
+			"mesecons_extras_delayer_top_active_" .. stat .. ".png",
 			"mesecons_extras_common_bottom.png",
 			"mesecons_extras_common_side.png",
 			"mesecons_extras_common_side.png",

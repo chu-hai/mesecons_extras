@@ -91,7 +91,7 @@ end
 
 local function update_infotext(pos, desc)
 	local meta = minetest.get_meta(pos)
-	meta:set_string("infotext", desc.."\n"..intl.channel..meta:get_int("channel_no"))
+	meta:set_string("infotext", desc .. "\n" .. intl.channel .. meta:get_int("channel_no"))
 end
 
 local function update_formspec(pos, desc)
@@ -101,11 +101,11 @@ local function update_formspec(pos, desc)
 
 	meta:set_string("formspec", "size[6,2]" ..
 		"bgcolor[#00000000]" ..
- 		"background[0,0;6,2;mesecons_extras_form_bg.png;true]"..
- 		"label[0,0;"..desc.."]"..
-		"label[1,0.8;"..intl.channel.."]"..
-		"dropdown[1,1.3;3;channel_no;"..ch_list..";"..ch_idx.."]"..
-		"button_exit[4,1.3;2,0.8;save;"..intl.save.."]"
+ 		"background[0,0;6,2;mesecons_extras_form_bg.png;true]" ..
+ 		"label[0,0;" .. desc .. "]" ..
+		"label[1,0.8;" .. intl.channel .. "]" ..
+		"dropdown[1,1.3;3;channel_no;" .. ch_list .. ";" .. ch_idx .. "]" ..
+		"button_exit[4,1.3;2,0.8;save;" .. intl.save .. "]"
  	)
 end
 
@@ -175,9 +175,9 @@ local function update_node(m_type, pos, node, msg, change_mesecon_signal)
 		end
 	end
 
-	node.name = "mesecons_extras:signal_"..m_type
+	node.name = "mesecons_extras:signal_" .. m_type
 	if stats.r or stats.g or stats.b then
-		node.name = node.name.."_"..(stats.r and "R" or "")..(stats.g and "G" or "")..(stats.b and "B" or "")
+		node.name = node.name .. "_" .. (stats.r and "R" or "") .. (stats.g and "G" or "") .. (stats.b and "B" or "")
 	end
 	minetest.swap_node(pos, node)
 end
@@ -185,7 +185,7 @@ end
 local function digiline_receive(m_type)
 	return function(pos, node, channel, msg)
 		local meta = minetest.get_meta(pos)
-		local channel_str = CHANNEL_PREFIX..meta:get_int("channel_no")
+		local channel_str = CHANNEL_PREFIX .. meta:get_int("channel_no")
 
 		if channel == channel_str then
 			update_node(m_type, pos, node, msg, true)
@@ -199,21 +199,21 @@ local function create_digiline_message(color, stat)
 		["green"] = "G",
 		["blue"]  = "B",
 	}
-	return (stat and "ON" or "OFF")..":"..msg_color[color]
+	return (stat and "ON" or "OFF") .. ":" .. msg_color[color]
 end
 
 local function mesecon_action(m_type, stat)
 	return function(pos, node, rule)
 		local meta = minetest.get_meta(pos)
 		local msg = create_digiline_message(rule.name, stat)
-		local channel = CHANNEL_PREFIX..meta:get_int("channel_no")
+		local channel = CHANNEL_PREFIX .. meta:get_int("channel_no")
 		update_node(m_type, pos, node, msg, false)
 		digiline:receptor_send(pos, get_digiline_rules(m_type)(node), channel, msg)
 	end
 end
 
 local function register_node(m_type, desc)
-	local top_tile = "mesecons_extras_"..m_type.."_top.png"
+	local top_tile = "mesecons_extras_" .. m_type .. "_top.png"
 	local tiles
 	local digiline_defs
 	local mesecon_defs
@@ -221,11 +221,11 @@ local function register_node(m_type, desc)
 	if m_type == "mux" then
 		tiles = {
 			top_tile,
-			top_tile.."^[transformFY",
-			"mesecons_extras_"..m_type.."_side_blue_off.png",
-			"mesecons_extras_"..m_type.."_side_red_off.png",
-			"mesecons_extras_"..m_type.."_side_digiline.png",
-			"mesecons_extras_"..m_type.."_side_green_off.png"
+			top_tile .. "^[transformFY",
+			"mesecons_extras_" .. m_type .. "_side_blue_off.png",
+			"mesecons_extras_" .. m_type .. "_side_red_off.png",
+			"mesecons_extras_" .. m_type .. "_side_digiline.png",
+			"mesecons_extras_" .. m_type .. "_side_green_off.png"
 		}
 		digiline_defs = {
 			receptor = {rules = get_digiline_rules(m_type)},
@@ -243,11 +243,11 @@ local function register_node(m_type, desc)
 	else
 		tiles = {
 			top_tile,
-			top_tile.."^[transformFY",
-			"mesecons_extras_"..m_type.."_side_blue_off.png",
-			"mesecons_extras_"..m_type.."_side_red_off.png",
-			"mesecons_extras_"..m_type.."_side_green_off.png",
-			"mesecons_extras_"..m_type.."_side_digiline.png"
+			top_tile .. "^[transformFY",
+			"mesecons_extras_" .. m_type .. "_side_blue_off.png",
+			"mesecons_extras_" .. m_type .. "_side_red_off.png",
+			"mesecons_extras_" .. m_type .. "_side_green_off.png",
+			"mesecons_extras_" .. m_type .. "_side_digiline.png"
 		}
 		digiline_defs = {
 			effector = {
@@ -263,7 +263,7 @@ local function register_node(m_type, desc)
  		}
 	end
 
-	minetest.register_node("mesecons_extras:signal_"..m_type, {
+	minetest.register_node("mesecons_extras:signal_" .. m_type, {
 		description = desc,
 		inventory_image = top_tile,
 		wield_image = top_tile,
@@ -299,38 +299,38 @@ local function register_node(m_type, desc)
 		if r or g or b then
 			local tiles
 			local top_on_tile = top_tile
-			local side_r_tile = "mesecons_extras_"..m_type.."_side_red_off.png"
-			local side_g_tile = "mesecons_extras_"..m_type.."_side_green_off.png"
-			local side_b_tile = "mesecons_extras_"..m_type.."_side_blue_off.png"
+			local side_r_tile = "mesecons_extras_" .. m_type .. "_side_red_off.png"
+			local side_g_tile = "mesecons_extras_" .. m_type .. "_side_green_off.png"
+			local side_b_tile = "mesecons_extras_" .. m_type .. "_side_blue_off.png"
 			local suffix = ""
 			local stats = {}
 
 			if r then
-				side_r_tile = "mesecons_extras_"..m_type.."_side_red_on.png"
-				top_on_tile = top_on_tile.."^mesecons_extras_"..m_type.."_top_red_on.png"
-				suffix = suffix.."R"
+				side_r_tile = "mesecons_extras_" .. m_type .. "_side_red_on.png"
+				top_on_tile = top_on_tile .. "^mesecons_extras_" .. m_type .. "_top_red_on.png"
+				suffix = suffix .. "R"
 				stats.red = true
 			end
 			if g then
-				side_g_tile = "mesecons_extras_"..m_type.."_side_green_on.png"
-				top_on_tile = top_on_tile.."^mesecons_extras_"..m_type.."_top_green_on.png"
-				suffix = suffix.."G"
+				side_g_tile = "mesecons_extras_" .. m_type .. "_side_green_on.png"
+				top_on_tile = top_on_tile .. "^mesecons_extras_" .. m_type .. "_top_green_on.png"
+				suffix = suffix .. "G"
 				stats.green = true
 			end
 			if b then
-				side_b_tile = "mesecons_extras_"..m_type.."_side_blue_on.png"
-				top_on_tile = top_on_tile.."^mesecons_extras_"..m_type.."_top_blue_on.png"
-				suffix = suffix.."B"
+				side_b_tile = "mesecons_extras_" .. m_type .. "_side_blue_on.png"
+				top_on_tile = top_on_tile .. "^mesecons_extras_" .. m_type .. "_top_blue_on.png"
+				suffix = suffix .. "B"
 				stats.blue = true
 			end
 
 			if m_type == "mux" then
 				tiles = {
 					top_on_tile,
-					top_on_tile.."^[transformFY",
+					top_on_tile .. "^[transformFY",
 					side_b_tile,
 					side_r_tile,
-					"mesecons_extras_"..m_type.."_side_digiline.png",
+					"mesecons_extras_" .. m_type .. "_side_digiline.png",
 					side_g_tile
 				}
  				digiline_defs = {
@@ -347,11 +347,11 @@ local function register_node(m_type, desc)
 			else
 				tiles = {
 					top_on_tile,
-					top_on_tile.."^[transformFY",
+					top_on_tile .. "^[transformFY",
 					side_b_tile,
 					side_r_tile,
 					side_g_tile,
-					"mesecons_extras_"..m_type.."_side_digiline.png"
+					"mesecons_extras_" .. m_type .. "_side_digiline.png"
 				}
  				digiline_defs = {
 					effector = {
@@ -370,8 +370,8 @@ local function register_node(m_type, desc)
  				}
 			end
 
-			minetest.register_node("mesecons_extras:signal_"..m_type.."_"..suffix, {
-				description = desc.." (ON)",
+			minetest.register_node("mesecons_extras:signal_" .. m_type .. "_" .. suffix, {
+				description = desc .. " (ON)",
 				tiles = tiles,
 				drawtype = "nodebox",
 				node_box = {
@@ -388,7 +388,7 @@ local function register_node(m_type, desc)
 				groups = {cracky = 2, oddly_breakable_by_hand = 3, not_in_creative_inventory = 1},
 				sounds = default.node_sound_stone_defaults(),
 				stats = stats,
-				drop = "mesecons_extras:signal_"..m_type,
+				drop = "mesecons_extras:signal_" .. m_type,
 
 				on_rotate = screwdriver.disallow,
 				on_punch = on_punch(desc),

@@ -70,26 +70,26 @@ local function create_formspec(pos, node)
 	local t_name = minetest.get_node(t_pos).name
 	local metatbl = t_meta:to_table()
 
-	local form = "size[8.5,4]"..
+	local form = "size[8.5,4]" ..
 				 "bgcolor[#00000000]" ..
-				 "background[0,0;8.5,4;mesecons_extras_form_bg.png;true]"..
-				 "label[0.2,0.1;"..intl.desc.."]"..
-				 "label[1,1;"..intl.ui_target_desc.."]"..
-				 "label[1,2.15;"..intl.ui_target_inv.."]"..
+				 "background[0,0;8.5,4;mesecons_extras_form_bg.png;true]" ..
+				 "label[0.2,0.1;" .. intl.desc .. "]" ..
+				 "label[1,1;" .. intl.ui_target_desc .. "]" ..
+				 "label[1,2.15;" .. intl.ui_target_inv .. "]" ..
 				 "box[3.5,0.65;1,1;#0f0f0f]"
 
 	if t_name ~= "air" then
-		form = form .. "item_image[3.6,0.7;1,1;"..t_name.."]"
+		form = form .. "item_image[3.6,0.7;1,1;" .. t_name .. "]"
 	end
 
 	if get_first_inv(metatbl.inventory) then
 		local str,idx = get_dropdown_data(metatbl.inventory, t_invname)
-		form = form .. "dropdown[3.5,2;4;invlist;"..str..";"..idx.."]"
+		form = form .. "dropdown[3.5,2;4;invlist;" .. str .. ";" .. idx .. "]"
 	else
-		form = form .. "label[3.55,2.15;"..intl.ui_target_na.."]"
+		form = form .. "label[3.55,2.15;" .. intl.ui_target_na .. "]"
 	end
 
-	form = form .. "checkbox[1,3;invert_signal;"..intl.ui_invert_signal..";"..meta:get_string("invert_signal").."]"
+	form = form .. "checkbox[1,3;invert_signal;" .. intl.ui_invert_signal .. ";" .. meta:get_string("invert_signal") .. "]"
 
 	return form
 end
@@ -221,9 +221,9 @@ minetest.register_node("mesecons_extras:inv_checker_inactive", {
 })
 
 for _, stat in pairs({"on", "off"}) do
-	minetest.register_node("mesecons_extras:inv_checker_active_"..stat, {
+	minetest.register_node("mesecons_extras:inv_checker_active_" .. stat, {
 		description = intl.desc,
-		tiles = {"mesecons_extras_invchk_active_"..stat.. ".png"},
+		tiles = {"mesecons_extras_invchk_active_" .. stat.. ".png"},
 		drawtype = "nodebox",
 		node_box = {
 			type = "wallmounted",

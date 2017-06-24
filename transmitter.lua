@@ -22,9 +22,9 @@ local function update_formspec(meta)
 
 	meta:set_string("formspec", "size[7.4,2]" ..
 		"bgcolor[#00000000]" ..
-		"background[0,0;7.4,2;mesecons_extras_form_bg.png;true]"..
-		"label[0,0;"..intl.desc.."]"..
-		"checkbox[1.2,0.8;fixed_mode;"..intl.mode..";"..mode.."]"
+		"background[0,0;7.4,2;mesecons_extras_form_bg.png;true]" ..
+		"label[0,0;" .. intl.desc .. "]" ..
+		"checkbox[1.2,0.8;fixed_mode;" .. intl.mode .. ";" .. mode .. "]"
 	)
 end
 
@@ -53,7 +53,7 @@ local function distance_change_off(dist)
 	return function(pos, node, puncher)
 		if can_change_distance(pos, puncher) then
 			local new_dist = ((dist + 1) > max_dist) and min_dist or dist + 1
-			node.name = "mesecons_extras:mesecon_transmitter_off_"..new_dist
+			node.name = "mesecons_extras:mesecon_transmitter_off_" .. new_dist
 			minetest.swap_node(pos, node)
 		end
 	end
@@ -64,7 +64,7 @@ local function distance_change_on(dist)
 		if can_change_distance(pos, puncher) then
 			local new_dist = ((dist + 1) > max_dist) and min_dist or dist + 1
 			mesecon.receptor_off(pos, get_output_rules(dist)(node))
-			node.name = "mesecons_extras:mesecon_transmitter_on_"..new_dist
+			node.name = "mesecons_extras:mesecon_transmitter_on_" .. new_dist
 			minetest.swap_node(pos, node)
 			mesecon.receptor_on(pos, get_output_rules(new_dist)(node))
 		end
@@ -89,13 +89,13 @@ end
 -- Node definitions
 --------------------------------------
 for dist = min_dist, max_dist do
-	minetest.register_node("mesecons_extras:mesecon_transmitter_off_"..dist, {
+	minetest.register_node("mesecons_extras:mesecon_transmitter_off_" .. dist, {
 		description = intl.desc,
 		tiles = {
-			"mesecons_extras_transmitter_side"..dist.."_off.png^[transformR180",
-			"mesecons_extras_transmitter_side"..dist.."_off.png",
-			"mesecons_extras_transmitter_side"..dist.."_off.png^[transformR90",
-			"mesecons_extras_transmitter_side"..dist.."_off.png^[transformR270",
+			"mesecons_extras_transmitter_side" .. dist .. "_off.png^[transformR180",
+			"mesecons_extras_transmitter_side" .. dist .. "_off.png",
+			"mesecons_extras_transmitter_side" .. dist .. "_off.png^[transformR90",
+			"mesecons_extras_transmitter_side" .. dist .. "_off.png^[transformR270",
 			"mesecons_extras_transmitter_back_off.png",
 			"mesecons_extras_transmitter_front_off.png"
 		},
@@ -134,7 +134,7 @@ for dist = min_dist, max_dist do
 				rules = mesecon.rules.default,
 				action_on = function(pos, node)
 					local newnode = table.copy(node)
-					newnode.name = "mesecons_extras:mesecon_transmitter_on_"..dist
+					newnode.name = "mesecons_extras:mesecon_transmitter_on_" .. dist
 					minetest.swap_node(pos, newnode)
 					mesecon.receptor_on(pos, get_output_rules(dist)(node))
 				end
@@ -142,13 +142,13 @@ for dist = min_dist, max_dist do
 		}
 	})
 
-	minetest.register_node("mesecons_extras:mesecon_transmitter_on_"..dist, {
+	minetest.register_node("mesecons_extras:mesecon_transmitter_on_" .. dist, {
 		description = "Directional Mesecon Signal Transmitter (ON)",
 		tiles = {
-			"mesecons_extras_transmitter_side"..dist.."_on.png^[transformR180",
-			"mesecons_extras_transmitter_side"..dist.."_on.png",
-			"mesecons_extras_transmitter_side"..dist.."_on.png^[transformR90",
-			"mesecons_extras_transmitter_side"..dist.."_on.png^[transformR270",
+			"mesecons_extras_transmitter_side" .. dist .. "_on.png^[transformR180",
+			"mesecons_extras_transmitter_side" .. dist .. "_on.png",
+			"mesecons_extras_transmitter_side" .. dist .. "_on.png^[transformR90",
+			"mesecons_extras_transmitter_side" .. dist .. "_on.png^[transformR270",
 			"mesecons_extras_transmitter_back_on.png",
 			"mesecons_extras_transmitter_front_on.png"
 		},
@@ -177,7 +177,7 @@ for dist = min_dist, max_dist do
 				rules = mesecon.rules.default,
 				action_off = function(pos, node)
 					local newnode = table.copy(node)
-					newnode.name = "mesecons_extras:mesecon_transmitter_off_"..dist
+					newnode.name = "mesecons_extras:mesecon_transmitter_off_" .. dist
 					minetest.swap_node(pos, newnode)
 					mesecon.receptor_off(pos, get_output_rules(dist)(node))
 				end

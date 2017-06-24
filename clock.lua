@@ -20,9 +20,9 @@ local function update_infotext(meta)
 	local interval = meta:get_float("interval")
 
 	if maximum_count == 0 then
-		str = str.." ["..intl.infinity.." : "..interval..intl.second.."]"
+		str = str .. " [" .. intl.infinity .. " : " .. interval .. intl.second .. "]"
 	else
-		str = str.." ["..counter_current.."/"..maximum_count.." : "..interval..intl.second.."]"
+		str = str .. " [" .. counter_current .. "/" .. maximum_count .. " : " .. interval .. intl.second .. "]"
 	end
 
 	meta:set_string("infotext", str)
@@ -31,10 +31,10 @@ end
 local function update_formspec(meta)
 	meta:set_string("formspec", "size[7.4,3]" ..
 		"bgcolor[#00000000]" ..
-		"background[0,0;7.4,3;mesecons_extras_form_bg.png;true]"..
-		"label[0,0;"..intl.desc.."]"..
-		"field[0.5,0.8;7,2;maximum_count;"..intl.max_cnt..";${maximum_count}]"..
-		"field[0.5,2.2;7,2;interval;"..intl.interval..";${interval}]"
+		"background[0,0;7.4,3;mesecons_extras_form_bg.png;true]" ..
+		"label[0,0;" .. intl.desc .. "]" ..
+		"field[0.5,0.8;7,2;maximum_count;" .. intl.max_cnt .. ";${maximum_count}]" ..
+		"field[0.5,2.2;7,2;interval;" .. intl.interval .. ";${interval}]"
 	)
 
 	update_infotext(meta)
@@ -254,10 +254,10 @@ minetest.register_node("mesecons_extras:mesecons_extras_clock", {
 })
 
 for _, stat in pairs({"on", "off"}) do
-	minetest.register_node("mesecons_extras:mesecons_extras_clock_active_"..stat, {
+	minetest.register_node("mesecons_extras:mesecons_extras_clock_active_" .. stat, {
 		description = intl.desc,
 		tiles = {
-			"mesecons_extras_clock_top_active_"..stat..".png",
+			"mesecons_extras_clock_top_active_" .. stat .. ".png",
 			"mesecons_extras_common_bottom.png",
 			"mesecons_extras_common_side.png",
 			"mesecons_extras_common_side.png",

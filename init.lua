@@ -67,8 +67,8 @@ local module_names = {
 	}
 }
 
-dofile(modpath.."/functions.lua")
-dofile(modpath.."/material.lua")
+dofile(modpath .. "/functions.lua")
+dofile(modpath .. "/material.lua")
 for name, modules in pairs(module_names) do
 	if mesecons_extras.settings[name] then
 		for _, filename in ipairs(modules) do

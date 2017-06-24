@@ -14,15 +14,15 @@ local max_output_time = 5.0
 -- Functions
 --------------------------------------
 local function update_infotext(meta)
-	meta:set_string("infotext", intl.desc.." ["..meta:get_float("output_time")..intl.second.."]")
+	meta:set_string("infotext", intl.desc .. " [" .. meta:get_float("output_time") .. intl.second .. "]")
 end
 
 local function update_formspec(meta)
 	meta:set_string("formspec", "size[6.4,2]" ..
 		"bgcolor[#00000000]" ..
-		"background[0,0;6.4,2;mesecons_extras_form_bg.png;true]"..
-		"label[0,0;"..intl.desc.."]"..
-		"field[0.5,0.8;6,2;output_time;"..intl.output_time..";${output_time}]"
+		"background[0,0;6.4,2;mesecons_extras_form_bg.png;true]" ..
+		"label[0,0;" .. intl.desc .. "]" ..
+		"field[0.5,0.8;6,2;output_time;" .. intl.output_time .. ";${output_time}]"
 	)
 
 	update_infotext(meta)

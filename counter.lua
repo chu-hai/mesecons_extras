@@ -15,18 +15,18 @@ local max_output_time = 5.0
 -- Functions
 --------------------------------------
 local function update_infotext(meta)
-	meta:set_string("infotext", intl.desc.." ["..
-					meta:get_int("counter_current").."/"..
-					meta:get_int("counter_limit").."]")
+	meta:set_string("infotext", intl.desc .. " [" ..
+					meta:get_int("counter_current") .. "/" ..
+					meta:get_int("counter_limit") .. "]")
 end
 
 local function update_formspec(meta)
 	meta:set_string("formspec", "size[6.4,3]" ..
 		"bgcolor[#00000000]" ..
-		"background[0,0;6.4,3;mesecons_extras_form_bg.png;true]"..
-		"label[0,0;"..intl.desc.."]"..
-		"field[0.5,0.8;6,2;counter_limit;"..intl.counter_limit..";${counter_limit}]"..
-		"field[0.5,2.2;6,2;output_time;"..intl.output_time..";${output_time}]"
+		"background[0,0;6.4,3;mesecons_extras_form_bg.png;true]" ..
+		"label[0,0;" .. intl.desc .. "]" ..
+		"field[0.5,0.8;6,2;counter_limit;" .. intl.counter_limit .. ";${counter_limit}]" ..
+		"field[0.5,2.2;6,2;output_time;" .. intl.output_time .. ";${output_time}]"
 	)
 
 	update_infotext(meta)
@@ -212,10 +212,10 @@ minetest.register_node("mesecons_extras:mesecons_extras_counter", {
 
 
 for _, stat in pairs({"on", "off"}) do
-	minetest.register_node("mesecons_extras:mesecons_extras_counter_active_"..stat, {
+	minetest.register_node("mesecons_extras:mesecons_extras_counter_active_" .. stat, {
 		description = intl.desc,
 		tiles = {
-			"mesecons_extras_counter_top_active_"..stat..".png",
+			"mesecons_extras_counter_top_active_" .. stat .. ".png",
 			"mesecons_extras_common_bottom.png",
 			"mesecons_extras_common_side.png",
 			"mesecons_extras_common_side.png",

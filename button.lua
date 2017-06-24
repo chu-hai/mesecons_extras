@@ -33,8 +33,8 @@ local function register_button(basename, description, drawtype, recipe, output_c
 							   selection_box, inv_image, wield_image)
 
 	local nodename = basename
-	local nodename_off = nodename.."_off"
-	local nodename_on = nodename.."_on"
+	local nodename_off = nodename .. "_off"
+	local nodename_on = nodename .. "_on"
 
 	for _, stat in pairs({"off", "on"}) do
 		local tmp_name
