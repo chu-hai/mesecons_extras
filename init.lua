@@ -105,7 +105,7 @@ mesecon.queue:add_function("mesecons_extras_change_status", function (pos, statu
 				if math.floor(v) == v then
 					meta:set_int(k, v)
 				else
-					meta:set_float(k, v)
+					meta:set_string(k, v)
 				end
 			end
 		end

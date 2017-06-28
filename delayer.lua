@@ -18,7 +18,7 @@ local stage_off_delay = 3
 -- Functions
 --------------------------------------
 local function update_infotext(meta)
-	meta:set_string("infotext", intl.desc .. " [" .. meta:get_float("delay_time") .. intl.second .. "]")
+	meta:set_string("infotext", intl.desc .. " [" .. meta:get_string("delay_time") .. intl.second .. "]")
 end
 
 local function update_formspec(meta)
@@ -63,7 +63,7 @@ local function activate(pos, node)
 			"mesecons_extras:mesecons_extras_delayer_active_on",
 			get_output_rules(node)
 		},
-		meta:get_float("delay_time"), nil
+		tonumber(meta:get_string("delay_time")), nil
 	)
 
 end
@@ -84,13 +84,13 @@ local function deactivate(pos, node)
 			get_output_rules(node),
 			{stage = stage_inactive}
 		},
-		meta:get_float("delay_time"), nil
+		tonumber(meta:get_string("delay_time")), nil
 	)
 end
 
 local function on_construct(pos)
 	local meta = minetest.get_meta(pos)
-	meta:set_float("delay_time", default_delay_time)
+	meta:set_string("delay_time", default_delay_time)
 	meta:set_int("stage", stage_inactive)
 
 	update_formspec(meta)
@@ -109,7 +109,7 @@ local function on_receive_fields(pos, formname, fields, sender)
 		if num then
 			num = math.min(math.max(num, min_delay_time), max_delay_time)
 			num = math.floor(num * 10) / 10
-			meta:set_float("delay_time", num)
+			meta:set_string("delay_time", num)
 			update_infotext(meta)
 		end
 	end

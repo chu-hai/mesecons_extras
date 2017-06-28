@@ -72,7 +72,7 @@ local function action_on(pos, node, link, newstate)
 						get_output_rules(node),
 						{counter_current = 0}
 					},
-					meta:get_float("output_time"), nil
+					tonumber(meta:get_string("output_time")), nil
 				)
 			end
 		end
@@ -98,7 +98,7 @@ end
 
 local function on_construct(pos)
 	local meta = minetest.get_meta(pos)
-	meta:set_float("output_time", default_output_time)
+	meta:set_string("output_time", default_output_time)
 	meta:set_int("counter_current", 0)
 	meta:set_int("counter_limit", default_counter_limit)
 
@@ -126,7 +126,7 @@ local function on_receive_fields(pos, formname, fields, sender)
 		if num then
 			num = math.min(math.max(num, min_output_time), max_output_time)
 			num = math.floor(num * 10) / 10
-			meta:set_float("output_time", num)
+			meta:set_string("output_time", num)
 			update_infotext(meta)
 		end
 	end
