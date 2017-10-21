@@ -26,9 +26,9 @@ for name, v in pairs(mesecons_extras.settings) do
 	local setting_data = nil
 	local setting_name = "mesecons_extras." .. name
 	if type(v) == "boolean" then
-		setting_data = minetest.setting_getbool(setting_name)
+		setting_data = minetest.settings:get_bool(setting_name)
 	else
-		setting_data = minetest.setting_get(setting_name)
+		setting_data = minetest.settings:get(setting_name)
 		if type(v) == "number" then
 			setting_data = tonumber(setting_data)
 		end
