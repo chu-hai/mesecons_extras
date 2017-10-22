@@ -37,16 +37,22 @@ local function get_output_rules(node)
 end
 
 local function get_input_rules(node)
-	local rules = {{x = 0, y = 0, z = -1}}
+	local rules = { {x =  0, y = 0, z = -1, name="input"},
+					{x =  1, y = 0, z =  0, name="reset1"},
+					{x = -1, y = 0, z =  0, name="reset2"},
+				  }
 	for i = 0, node.param2 do
 		rules = mesecon.rotate_rules_left(rules)
 	end
 	return rules
 end
 
-local function action_on(pos, node)
-	local meta = minetest.get_meta(pos)
+local function activate(pos, node, link, newstate)
+	if link.name ~= "input" then
+		return
+	end
 
+	local meta = minetest.get_meta(pos)
 	node.name = "mesecons_extras:mesecons_extras_pulse_active_on"
 	minetest.swap_node(pos, node)
 	mesecon.receptor_on(pos, get_output_rules(node))
@@ -60,6 +66,14 @@ local function action_on(pos, node)
 		},
 		tonumber(meta:get_string("output_time")), nil
 	)
+end
+
+local function reset(pos, node, link, newstate)
+	if link.name ~= "input" then
+		node.name = "mesecons_extras:mesecons_extras_pulse"
+		minetest.swap_node(pos, node)
+		mesecon.receptor_off(pos, get_output_rules(node))
+	end
 end
 
 local function on_construct(pos)
@@ -160,7 +174,7 @@ minetest.register_node("mesecons_extras:mesecons_extras_pulse", {
 		},
 		effector = {
 			rules = get_input_rules,
-			action_on = action_on
+			action_on = activate
 		}
 	}
 })
@@ -203,7 +217,8 @@ minetest.register_node("mesecons_extras:mesecons_extras_pulse_active_on", {
 			rules = get_output_rules
 		},
 		effector = {
-			rules = get_input_rules
+			rules = get_input_rules,
+			action_on = reset
 		}
 	}
 })
