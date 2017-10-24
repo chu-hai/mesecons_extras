@@ -7,12 +7,11 @@ intl.ui_target_inv = S("Inventory Name:")
 intl.ui_target_na = S("Not available")
 intl.ui_invert_signal = S("Invert Mesecon signal")
 
-local inv_checker_formname = "mesecons_extras:inv_checker_formspec_"
-
 local default_target_inv_list = {
 	["default:furnace"]			= "fuel",
 	["default:furnace_active"]	= "fuel",
 }
+local formname_prefix = "mesecons_extras:inv_checker_formspec_"
 
 
 --------------------------------------
@@ -110,8 +109,12 @@ local function on_construct(pos)
 end
 
 local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)
+	if mesecons_extras.is_protected(pos, clicker) then
+		return
+	end
+
 	local formspec = create_formspec(pos, node)
-	local formname = inv_checker_formname .. minetest.pos_to_string(pos)
+	local formname = formname_prefix .. minetest.pos_to_string(pos)
 	minetest.show_formspec(clicker:get_player_name(), formname, formspec)
 end
 
@@ -163,16 +166,12 @@ end
 -- Register callbacks
 --------------------------------------
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if not string.match(formname, "^" .. inv_checker_formname) then
+	if not string.match(formname, "^" .. formname_prefix) then
 		return
 	end
 
-	local pos = minetest.string_to_pos(string.sub(formname, string.len(inv_checker_formname) + 1))
+	local pos = minetest.string_to_pos(string.sub(formname, string.len(formname_prefix) + 1))
 	local meta = minetest.get_meta(pos)
-
-	if mesecons_extras.is_protected(pos, player) then
-		return
-	end
 
 	if fields.invlist then
 		meta:set_string("target_inv", fields.invlist)
