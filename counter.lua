@@ -9,6 +9,7 @@ local default_output_time = 0.5
 local default_counter_limit = 5
 local min_output_time = 0.1
 local max_output_time = 5.0
+local formname_prefix = "mesecons_extras:counter_formspec_"
 
 
 --------------------------------------
@@ -20,16 +21,19 @@ local function update_infotext(meta)
 					meta:get_int("counter_limit") .. "]")
 end
 
-local function update_formspec(meta)
-	meta:set_string("formspec", "size[6.4,3]" ..
-		"bgcolor[#00000000]" ..
-		"background[0,0;6.4,3;mesecons_extras_form_bg.png;true]" ..
-		"label[0,0;" .. intl.desc .. "]" ..
-		"field[0.5,0.8;6,2;counter_limit;" .. intl.counter_limit .. ";${counter_limit}]" ..
-		"field[0.5,2.2;6,2;output_time;" .. intl.output_time .. ";${output_time}]"
-	)
+local function create_formspec(pos, node)
+	local meta = minetest.get_meta(pos)
+	local counter_limit = meta:get_int("counter_limit")
+	local output_time = meta:get_string("output_time")
+	local form = "size[6.4,3]" ..
+				 "bgcolor[#00000000]" ..
+				 "background[0,0;6.4,3;mesecons_extras_form_bg.png;true]" ..
+				 "label[0,0;" .. intl.desc .. "]" ..
+				 "field[0.5,0.8;6,2;counter_limit;" .. intl.counter_limit .. ";" .. counter_limit .. "]" ..
+				 "field[0.5,2.2;6,2;output_time;" .. intl.output_time .. ";" .. output_time .. "]"
 
 	update_infotext(meta)
+	return form
 end
 
 local function get_output_rules(node)
@@ -101,17 +105,30 @@ local function on_construct(pos)
 	meta:set_string("output_time", default_output_time)
 	meta:set_int("counter_current", 0)
 	meta:set_int("counter_limit", default_counter_limit)
-
-	update_formspec(meta)
 end
 
-local function on_receive_fields(pos, formname, fields, sender)
-	local meta = minetest.get_meta(pos)
-	local num
-
-	if mesecons_extras.is_protected(pos, sender) then
+local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)
+	if mesecons_extras.is_protected(pos, clicker) then
 		return
 	end
+
+	local formspec = create_formspec(pos, node)
+	local formname = formname_prefix .. minetest.pos_to_string(pos)
+	minetest.show_formspec(clicker:get_player_name(), formname, formspec)
+end
+
+
+--------------------------------------
+-- Register callbacks
+--------------------------------------
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if not string.match(formname, "^" .. formname_prefix) then
+		return
+	end
+
+	local pos = minetest.string_to_pos(string.sub(formname, string.len(formname_prefix) + 1))
+	local meta = minetest.get_meta(pos)
+	local num
 
 	if fields.counter_limit then
 		num = tonumber(fields.counter_limit) or 0
@@ -130,13 +147,9 @@ local function on_receive_fields(pos, formname, fields, sender)
 			update_infotext(meta)
 		end
 	end
-end
 
-local function on_punch(pos, node, puncher)
-	local meta = minetest.get_meta(pos)
-
-	update_formspec(meta)
-end
+	return true
+end)
 
 
 --------------------------------------
@@ -191,11 +204,9 @@ minetest.register_node("mesecons_extras:mesecons_extras_counter", {
 	sunlight_propagates = true,
 
 	on_construct = on_construct,
-	on_receive_fields = on_receive_fields,
-	on_punch = on_punch,
-
-	do_update_infotext = update_infotext,
+	on_rightclick = on_rightclick,
 	on_rotate = mesecons_extras.rotate_simple,
+	do_update_infotext = update_infotext,
 
 	sounds = default.node_sound_stone_defaults(),
 	mesecons = {
@@ -238,11 +249,9 @@ for _, stat in pairs({"on", "off"}) do
 		sunlight_propagates = true,
 		drop = "mesecons_extras:mesecons_extras_counter",
 
-		on_receive_fields = on_receive_fields,
-		on_punch = on_punch,
-
-		do_update_infotext = update_infotext,
+		on_rightclick = on_rightclick,
 		on_rotate = screwdriver.disallow,
+		do_update_infotext = update_infotext,
 
 		sounds = default.node_sound_stone_defaults(),
 		mesecons = {
@@ -269,4 +278,22 @@ minetest.register_craft({
 		{"mesecons:mesecon",  "mesecons_luacontroller:luacontroller0000", "mesecons:mesecon"},
 		{"stairs:slab_stone", "stairs:slab_stone",                        "stairs:slab_stone"},
 	}
+})
+
+
+--------------------------------------
+-- Backwards compatibility
+--------------------------------------
+minetest.register_lbm({
+	name = "mesecons_extras:counter_erase_formspec",
+	nodenames = {"mesecons_extras:mesecons_extras_counter",
+				 "mesecons_extras:mesecons_extras_counter_active_on",
+				 "mesecons_extras:mesecons_extras_counter_active_off"},
+	run_at_every_load = true,
+	action = function(pos, node)
+		local meta = minetest.get_meta(pos)
+		if meta:get_string("formspec") then
+			meta:set_string("formspec", nil)
+		end
+	end
 })
