@@ -8,6 +8,7 @@ intl.second = S("sec")
 intl.infinity = S("infinity")
 
 local default_interval = 1
+local formname_prefix = "mesecons_extras:clock_formspec_"
 
 
 --------------------------------------
@@ -28,16 +29,19 @@ local function update_infotext(meta)
 	meta:set_string("infotext", str)
 end
 
-local function update_formspec(meta)
-	meta:set_string("formspec", "size[7.4,3]" ..
-		"bgcolor[#00000000]" ..
-		"background[0,0;7.4,3;mesecons_extras_form_bg.png;true]" ..
-		"label[0,0;" .. intl.desc .. "]" ..
-		"field[0.5,0.8;7,2;maximum_count;" .. intl.max_cnt .. ";${maximum_count}]" ..
-		"field[0.5,2.2;7,2;interval;" .. intl.interval .. ";${interval}]"
-	)
+local function create_formspec(pos, node)
+	local meta = minetest.get_meta(pos)
+	local maximum_count = meta:get_int("maximum_count")
+	local interval = meta:get_string("interval")
+	local form = "size[7.4,3]" ..
+				 "bgcolor[#00000000]" ..
+				 "background[0,0;7.4,3;mesecons_extras_form_bg.png;true]" ..
+				 "label[0,0;" .. intl.desc .. "]" ..
+				 "field[0.5,0.8;7,2;maximum_count;" .. intl.max_cnt .. ";" .. maximum_count .. "]" ..
+				 "field[0.5,2.2;7,2;interval;" .. intl.interval .. ";" .. interval .. "]"
 
 	update_infotext(meta)
+	return form
 end
 
 local function get_output_rules(node)
@@ -121,38 +125,16 @@ local function on_construct(pos)
 	meta:set_string("interval", default_interval)
 	meta:set_int("counter_current", 0)
 	meta:set_string("state", "off")
-
-	update_formspec(meta)
 end
 
-local function on_receive_fields(pos, formname, fields, sender)
-	local meta = minetest.get_meta(pos)
-	local num
-
-	if mesecons_extras.is_protected(pos, sender) then
+local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)
+	if mesecons_extras.is_protected(pos, clicker) then
 		return
 	end
 
-	if fields.maximum_count then
-		num = tonumber(fields.maximum_count)
-		if num then
-			meta:set_int("maximum_count", num)
-			update_infotext(meta)
-		end
-	end
-
-	if fields.interval then
-		num = tonumber(fields.interval)
-		if num then
-			if num > 0 then
-				num = math.floor(num * 10) / 10
-			else
-				num = default_interval
-			end
-			meta:set_string("interval", num)
-			update_infotext(meta)
-		end
-	end
+	local formspec = create_formspec(pos, node)
+	local formname = formname_prefix .. minetest.pos_to_string(pos)
+	minetest.show_formspec(clicker:get_player_name(), formname, formspec)
 end
 
 local function on_timer(pos)
@@ -181,11 +163,43 @@ local function on_timer(pos)
 	return true
 end
 
-local function on_punch(pos, node, puncher)
-	local meta = minetest.get_meta(pos)
 
-	update_formspec(meta)
-end
+--------------------------------------
+-- Register callbacks
+--------------------------------------
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if not string.match(formname, "^" .. formname_prefix) then
+		return
+	end
+
+	local pos = minetest.string_to_pos(string.sub(formname, string.len(formname_prefix) + 1))
+	local meta = minetest.get_meta(pos)
+	local num
+
+	if fields.maximum_count then
+		num = tonumber(fields.maximum_count)
+		if num then
+			meta:set_int("maximum_count", num)
+			update_infotext(meta)
+		end
+	end
+
+	if fields.interval then
+		num = tonumber(fields.interval)
+		if num then
+			if num > 0 then
+				num = math.floor(num * 10) / 10
+			else
+				num = default_interval
+			end
+			meta:set_string("interval", num)
+			update_infotext(meta)
+		end
+	end
+
+	return true
+end)
+
 
 --------------------------------------
 -- Node definitions
@@ -235,9 +249,7 @@ minetest.register_node("mesecons_extras:mesecons_extras_clock", {
 	sunlight_propagates = true,
 
 	on_construct = on_construct,
-	on_receive_fields = on_receive_fields,
-	on_punch = on_punch,
-
+	on_rightclick = on_rightclick,
 	on_rotate = mesecons_extras.rotate_simple,
 
 	sounds = default.node_sound_stone_defaults(),
@@ -280,10 +292,8 @@ for _, stat in pairs({"on", "off"}) do
 		sunlight_propagates = true,
 		drop = "mesecons_extras:mesecons_extras_clock",
 
-		on_receive_fields = on_receive_fields,
-		on_punch = on_punch,
+		on_rightclick = on_rightclick,
 		on_timer = on_timer,
-
 		on_rotate = screwdriver.disallow,
 
 		sounds = default.node_sound_stone_defaults(),
@@ -301,6 +311,7 @@ for _, stat in pairs({"on", "off"}) do
 	})
 end
 
+
 --------------------------------------
 -- Craft recipe definitions
 --------------------------------------
@@ -311,4 +322,22 @@ minetest.register_craft({
 		{"mesecons:mesecon",  "mesecons_luacontroller:luacontroller0000", "mesecons:mesecon"},
 		{"stairs:slab_stone", "stairs:slab_stone",                        "stairs:slab_stone"},
 	}
+})
+
+
+--------------------------------------
+-- Backwards compatibility
+--------------------------------------
+minetest.register_lbm({
+	name = "mesecons_extras:clock_erase_formspec",
+	nodenames = {"mesecons_extras:mesecons_extras_clock",
+				 "mesecons_extras:mesecons_extras_clock_active_on",
+				 "mesecons_extras:mesecons_extras_clock_active_off"},
+	run_at_every_load = true,
+	action = function(pos, node)
+		local meta = minetest.get_meta(pos)
+		if meta:get_string("formspec") then
+			meta:set_string("formspec", nil)
+		end
+	end
 })
