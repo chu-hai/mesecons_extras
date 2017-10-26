@@ -57,12 +57,10 @@ local function on_construct(pos)
 	meta:set_string("infotext", intl.desc)
 end
 
-local function on_punch(pos, node, puncher)
+local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)
 	local meta = minetest.get_meta(pos)
-
 	meta:set_string("infotext", intl.desc)
 end
-
 
 
 --------------------------------------
@@ -112,8 +110,7 @@ minetest.register_node("mesecons_extras:mesecons_extras_toggle", {
 	sunlight_propagates = true,
 
 	on_construct = on_construct,
-	on_punch = on_punch,
-
+	on_rightclick = on_rightclick,
 	on_rotate = mesecons_extras.rotate_simple,
 
 	sounds = default.node_sound_stone_defaults(),
@@ -155,8 +152,7 @@ minetest.register_node("mesecons_extras:mesecons_extras_toggle_active_on", {
 	sunlight_propagates = true,
 	drop = "mesecons_extras:mesecons_extras_toggle",
 
-	on_punch = on_punch,
-
+	on_rightclick = on_rightclick,
 	on_rotate = screwdriver.disallow,
 
 	sounds = default.node_sound_stone_defaults(),
