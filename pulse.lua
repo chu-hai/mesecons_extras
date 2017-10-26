@@ -82,6 +82,7 @@ end
 local function on_construct(pos)
 	local meta = minetest.get_meta(pos)
 	meta:set_string("output_time", default_output_time)
+	update_infotext(meta)
 end
 
 local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)

@@ -110,6 +110,7 @@ local function on_construct(pos)
 	local meta = minetest.get_meta(pos)
 	meta:set_string("delay_time", default_delay_time)
 	meta:set_int("stage", stage_inactive)
+	update_infotext(meta)
 end
 
 local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)

@@ -105,6 +105,7 @@ local function on_construct(pos)
 	meta:set_string("output_time", default_output_time)
 	meta:set_int("counter_current", 0)
 	meta:set_int("counter_limit", default_counter_limit)
+	update_infotext(meta)
 end
 
 local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)

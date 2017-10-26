@@ -125,6 +125,7 @@ local function on_construct(pos)
 	meta:set_string("interval", default_interval)
 	meta:set_int("counter_current", 0)
 	meta:set_string("state", "off")
+	update_infotext(meta)
 end
 
 local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)
