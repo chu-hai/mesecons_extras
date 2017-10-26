@@ -1,3 +1,8 @@
+if not minetest.get_modpath("digilines") then
+	minetest.log("warning", "[Mesecons Extras] Multiplexer needs digilines mod.")
+	return
+end
+
 local S = mesecons_extras.getter
 
 local intl = {}
@@ -10,16 +15,16 @@ local digiline_rules = {mux = {}, demux = {}}
 local mesecon_rules  = {mux = {}, demux = {}}
 
 local CHANNEL_PREFIX = "mesecons_extras_mux_"
-
-if not minetest.get_modpath("digilines") then
-	minetest.log("warning", "[Mesecons Extras] Multiplexer needs digilines mod.")
-	return
-end
+local formname_prefix = "mesecons_extras:mux_formspec_"
 
 
 --------------------------------------
 -- Functions
 --------------------------------------
+local function get_node_description(pos)
+	return minetest.registered_nodes[minetest.get_node(pos).name].description
+end
+
 local function create_digiline_rules()
 	local function set_rules(base_rules, target)
 		for param2 = 0, 3 do
@@ -89,61 +94,49 @@ local function get_mesecon_input_rules(m_type)
 	end
 end
 
-local function update_infotext(pos, desc)
-	local meta = minetest.get_meta(pos)
+local function update_infotext(pos, meta)
+	local desc = get_node_description(pos)
 	meta:set_string("infotext", desc .. "\n" .. intl.channel .. meta:get_int("channel_no"))
 end
 
-local function update_formspec(pos, desc)
+local function create_formspec(pos, node)
 	local meta = minetest.get_meta(pos)
+	local desc = get_node_description(pos)
 	local ch_list = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16"
 	local ch_idx = meta:get_int("channel_no")
 
-	meta:set_string("formspec", "size[6,2]" ..
-		"bgcolor[#00000000]" ..
- 		"background[0,0;6,2;mesecons_extras_form_bg.png;true]" ..
- 		"label[0,0;" .. desc .. "]" ..
-		"label[1,0.8;" .. intl.channel .. "]" ..
-		"dropdown[1,1.3;3;channel_no;" .. ch_list .. ";" .. ch_idx .. "]" ..
-		"button_exit[4,1.3;2,0.8;save;" .. intl.save .. "]"
- 	)
+	local form = "size[6,2]" ..
+				 "bgcolor[#00000000]" ..
+				 "background[0,0;6,2;mesecons_extras_form_bg.png;true]" ..
+				 "label[0,0;" .. desc .. "]" ..
+				 "label[1,0.8;" .. intl.channel .. "]" ..
+				 "dropdown[1,1.3;3;channel_no;" .. ch_list .. ";" .. ch_idx .. "]" ..
+				 "button_exit[4,1.3;2,0.8;save;" .. intl.save .. "]"
+
+	update_infotext(pos, meta)
+	return form
 end
 
-local function on_construct(desc)
-	return function(pos)
-		local meta = minetest.get_meta(pos)
-		meta:set_int("channel_no", 1)
-		update_formspec(pos, desc)
-		update_infotext(pos, desc)
+local function on_construct(pos)
+	local meta = minetest.get_meta(pos)
+	meta:set_int("channel_no", 1)
+	update_infotext(pos, meta)
+end
+
+local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)
+	if mesecons_extras.is_protected(pos, clicker) then
+		return
 	end
+
+	local formspec = create_formspec(pos, node)
+	local formname = formname_prefix .. minetest.pos_to_string(pos)
+	minetest.show_formspec(clicker:get_player_name(), formname, formspec)
 end
 
 local function on_rotate(pos, node, user, mode, new_param2)
 	local result = mesecons_extras.rotate_simple(pos, node, user, mode, new_param2)
 	digiline:update_autoconnect(pos)
 	return result
-end
-
-local function on_punch(desc)
-	return function(pos, node, puncher)
-		update_formspec(pos, desc)
-		update_infotext(pos, desc)
-	end
-end
-
-local function on_receive_fields(desc)
-	return function(pos, formname, fields, sender)
-		if mesecons_extras.is_protected(pos, sender) then
-			return
-		end
-
-		local meta = minetest.get_meta(pos)
-		if fields.save then
-			meta:set_int("channel_no", fields.channel_no)
-			update_formspec(pos, desc)
-			update_infotext(pos, desc)
-		end
-	end
 end
 
 local function update_node(m_type, pos, node, msg, change_mesecon_signal)
@@ -284,10 +277,9 @@ local function register_node(m_type, desc)
 		sounds = default.node_sound_stone_defaults(),
 		stats = {},
 
-		on_construct = on_construct(desc),
+		on_construct = on_construct,
+		on_rightclick = on_rightclick,
 		on_rotate = on_rotate,
-		on_punch = on_punch(desc),
-		on_receive_fields = on_receive_fields(desc),
 
  		digiline = digiline_defs,
  		mesecons = mesecon_defs
@@ -371,7 +363,7 @@ local function register_node(m_type, desc)
 			end
 
 			minetest.register_node("mesecons_extras:signal_" .. m_type .. "_" .. suffix, {
-				description = desc .. " (ON)",
+				description = desc,
 				tiles = tiles,
 				drawtype = "nodebox",
 				node_box = {
@@ -390,9 +382,8 @@ local function register_node(m_type, desc)
 				stats = stats,
 				drop = "mesecons_extras:signal_" .. m_type,
 
+				on_rightclick = on_rightclick,
 				on_rotate = screwdriver.disallow,
-				on_punch = on_punch(desc),
-				on_receive_fields = on_receive_fields(desc),
 
 				digiline = digiline_defs,
 				mesecons = mesecon_defs
@@ -402,6 +393,28 @@ local function register_node(m_type, desc)
 	end
 	end
 end
+
+
+--------------------------------------
+-- Register callbacks
+--------------------------------------
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if not string.match(formname, "^" .. formname_prefix) then
+		return
+	end
+
+	local pos = minetest.string_to_pos(string.sub(formname, string.len(formname_prefix) + 1))
+	local meta = minetest.get_meta(pos)
+	local desc = get_node_description(pos)
+	local num
+
+	if fields.save then
+		meta:set_int("channel_no", fields.channel_no)
+		update_infotext(pos, meta)
+	end
+
+	return true
+end)
 
 
 --------------------------------------
@@ -433,4 +446,37 @@ minetest.register_craft({
 		{"mesecons:mesecon",    "mesecons_luacontroller:luacontroller0000", "mesecons:mesecon"},
 		{"default:steel_ingot", "digilines:wire_std_00000000",              "default:steel_ingot"}
 	}
+})
+
+
+--------------------------------------
+-- Backwards compatibility
+--------------------------------------
+minetest.register_lbm({
+	name = "mesecons_extras:mux_demux_erase_formspec",
+	nodenames = {
+		"mesecons_extras:signal_mux",
+		"mesecons_extras:signal_mux_R",
+		"mesecons_extras:signal_mux_G",
+		"mesecons_extras:signal_mux_B",
+		"mesecons_extras:signal_mux_RG",
+		"mesecons_extras:signal_mux_RB",
+		"mesecons_extras:signal_mux_GB",
+		"mesecons_extras:signal_mux_RGB",
+		"mesecons_extras:signal_demux",
+		"mesecons_extras:signal_demux_R",
+		"mesecons_extras:signal_demux_G",
+		"mesecons_extras:signal_demux_B",
+		"mesecons_extras:signal_demux_RG",
+		"mesecons_extras:signal_demux_RB",
+		"mesecons_extras:signal_demux_GB",
+		"mesecons_extras:signal_demux_RGB"
+	},
+	run_at_every_load = true,
+	action = function(pos, node)
+		local meta = minetest.get_meta(pos)
+		if meta:get_string("formspec") then
+			meta:set_string("formspec", nil)
+		end
+	end
 })
