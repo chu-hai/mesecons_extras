@@ -6,6 +6,7 @@ intl.mode = S("Fixed Distance Mode")
 
 local min_dist = 2
 local max_dist = 4
+local formname_prefix = "mesecons_extras:receiver_formspec_"
 
 
 --------------------------------------
@@ -17,28 +18,37 @@ local function get_input_rules(dist)
 	end
 end
 
-local function update_formspec(meta)
+local function create_formspec(pos, node)
+	local meta = minetest.get_meta(pos)
 	local mode = meta:get_string("fixed_mode") == "on" and "true" or "false"
+	local form = "size[7.4,2]" ..
+				 "bgcolor[#00000000]" ..
+				 "background[0,0;7.4,2;mesecons_extras_form_bg.png;true]" ..
+				 "label[0,0;" .. intl.desc .. "]" ..
+				 "checkbox[1.2,0.8;fixed_mode;" .. intl.mode .. ";" .. mode .. "]"
 
-	meta:set_string("formspec", "size[7.4,2]" ..
-		"bgcolor[#00000000]" ..
-		"background[0,0;7.4,2;mesecons_extras_form_bg.png;true]" ..
-		"label[0,0;" .. intl.desc .. "]" ..
-		"checkbox[1.2,0.8;fixed_mode;" .. intl.mode .. ";" .. mode .. "]"
-	)
+	return form
 end
 
 local function on_construct(pos)
 	local meta = minetest.get_meta(pos)
 
 	meta:set_string("fixed_mode", "off")
-	update_formspec(meta)
+end
+
+local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)
+	if mesecons_extras.is_protected(pos, clicker) then
+		return
+	end
+
+	local formspec = create_formspec(pos, node)
+	local formname = formname_prefix .. minetest.pos_to_string(pos)
+	minetest.show_formspec(clicker:get_player_name(), formname, formspec)
 end
 
 local function can_change_distance(pos, player)
 	local result = true
 	local meta = minetest.get_meta(pos)
-	update_formspec(meta)
 
 	if mesecons_extras.is_protected(pos, player) then
 		result = false
@@ -68,18 +78,24 @@ local function on_rotate(pos, node, user, mode, new_param2)
 	return false
 end
 
-local function on_receive_fields(pos, formname, fields, sender)
-	local meta = minetest.get_meta(pos)
 
-	if mesecons_extras.is_protected(pos, sender) then
+--------------------------------------
+-- Register callbacks
+--------------------------------------
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if not string.match(formname, "^" .. formname_prefix) then
 		return
 	end
 
+	local pos = minetest.string_to_pos(string.sub(formname, string.len(formname_prefix) + 1))
+	local meta = minetest.get_meta(pos)
+
 	if fields.fixed_mode then
 		meta:set_string("fixed_mode", (fields.fixed_mode == "true" and "on" or "off"))
-		update_formspec(meta)
 	end
-end
+
+	return true
+end)
 
 
 --------------------------------------
@@ -102,7 +118,7 @@ for dist = min_dist, max_dist do
 		drop = "mesecons_extras:mesecon_receiver_off_2",
 
 		on_construct = on_construct,
-		on_receive_fields = on_receive_fields,
+		on_rightclick = on_rightclick,
 		on_punch = distance_change(dist, "off"),
  		on_rotate = on_rotate,
 
@@ -154,7 +170,7 @@ for dist = min_dist, max_dist do
 		sounds = default.node_sound_stone_defaults(),
 		drop = "mesecons_extras:mesecon_receiver_off_2",
 
-		on_receive_fields = on_receive_fields,
+		on_rightclick = on_rightclick,
 		on_punch = distance_change(dist, "on"),
  		on_rotate = on_rotate,
 
@@ -187,4 +203,27 @@ minetest.register_craft({
 		{"",                              "default:mese_crystal_fragment", ""},
 		{"default:steel_ingot",           "mesecons:mesecon",              "default:steel_ingot"},
 	}
+})
+
+
+--------------------------------------
+-- Backwards compatibility
+--------------------------------------
+minetest.register_lbm({
+	name = "mesecons_extras:receiver_erase_formspec",
+	nodenames = {
+		"mesecons_extras:mesecon_receiver_off_2",
+		"mesecons_extras:mesecon_receiver_off_3",
+		"mesecons_extras:mesecon_receiver_off_4",
+		"mesecons_extras:mesecon_receiver_on_2",
+		"mesecons_extras:mesecon_receiver_on_3",
+		"mesecons_extras:mesecon_receiver_on_4"
+	},
+	run_at_every_load = true,
+	action = function(pos, node)
+		local meta = minetest.get_meta(pos)
+		if meta:get_string("formspec") then
+			meta:set_string("formspec", nil)
+		end
+	end
 })
